@@ -1,12 +1,15 @@
-node {
-
-    checkout scm
-
-    docker.withRegistry('https://registry.hub.docker.com', 'sabhishekdockerhub') {
-
-        def customImage = docker.build("sabhishek1107/dockerweb")
-
-        /* Push the container to the custom Registry */
-        customImage.push()
+pipeline {
+    agent {
+        docker {
+            image 'maven:3-alpine'
+            args '-v $HOME/.m2:/root/.m2'
+        }
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn -B'
+            }
+        }
     }
 }
